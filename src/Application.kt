@@ -1,5 +1,6 @@
 package co.paulfran
 
+import co.paulfran.routes.registerRoute
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
@@ -19,7 +20,9 @@ fun Application.module(testing: Boolean = false) {
     install(CallLogging)
 
     // Required Features
-    install(Routing)
+    install(Routing) {
+        registerRoute()
+    }
     install(ContentNegotiation) {
         gson {
             setPrettyPrinting()
