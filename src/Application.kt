@@ -1,5 +1,6 @@
 package co.paulfran
 
+import co.paulfran.routes.loginRoute
 import co.paulfran.routes.registerRoute
 import io.ktor.application.*
 import io.ktor.features.*
@@ -22,6 +23,7 @@ fun Application.module(testing: Boolean = false) {
     // Required Features
     install(Routing) {
         registerRoute()
+        loginRoute()
     }
     install(ContentNegotiation) {
         gson {
