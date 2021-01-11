@@ -6,6 +6,7 @@ import org.litote.kmongo.contains
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.eq
 import org.litote.kmongo.reactivestreams.KMongo
+import org.litote.kmongo.setValue
 
 private val client = KMongo.createClient().coroutine
 private val database = client.getDatabase("CarriersDatabase")
@@ -36,4 +37,16 @@ suspend fun saveCarrier(carrier: Carrier): Boolean {
     } else {
         carriers.insertOne(carrier).wasAcknowledged()
     }
+}
+
+suspend fun deleteCarrierForCarrier(email: String, carrierId: String): Boolean {
+    val carrier = carriers.findOne(Carrier::id eq carrierId, Carrier::owners contains email)
+    carrier?.let { carrier ->
+        if (carrier.owners.size > 1) {
+            val newOwners = carrier.owners - email
+            val updateResult = carriers.updateOne(Carrier::id eq carrier.id, setValue(Carrier::owners, newOwners))
+            return updateResult.wasAcknowledged()
+        }
+        return carriers.deleteOneById(carrier.id).wasAcknowledged()
+    } ?: return false
 }
