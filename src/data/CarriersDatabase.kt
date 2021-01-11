@@ -39,7 +39,7 @@ suspend fun saveCarrier(carrier: Carrier): Boolean {
     }
 }
 
-suspend fun deleteCarrierForCarrier(email: String, carrierId: String): Boolean {
+suspend fun deleteCarrierForUser(email: String, carrierId: String): Boolean {
     val carrier = carriers.findOne(Carrier::id eq carrierId, Carrier::owners contains email)
     carrier?.let { carrier ->
         if (carrier.owners.size > 1) {

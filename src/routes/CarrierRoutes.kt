@@ -1,7 +1,9 @@
 package co.paulfran.routes
 
 import co.paulfran.data.collections.Carrier
+import co.paulfran.data.deleteCarrierForUser
 import co.paulfran.data.getCarriersForUser
+import co.paulfran.data.requests.DeleteCarrierRequest
 import co.paulfran.data.saveCarrier
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -40,4 +42,24 @@ fun Route.carrierRoutes() {
             }
         }
     }
+
+    route("/deleteCarrier") {
+        authenticate {
+            post {
+                val email = call.principal<UserIdPrincipal>()!!.name
+                val request = try {
+                    call.receive<DeleteCarrierRequest>()
+                } catch (e: ContentTransformationException) {
+                    call.respond(BadRequest)
+                    return@post
+                }
+                if (deleteCarrierForUser(email, request.id)) {
+                    call.respond(OK)
+                } else {
+                    call.respond(Conflict)
+                }
+            }
+        }
+    }
 }
+
