@@ -1,6 +1,7 @@
 package co.paulfran
 
 import co.paulfran.data.checkPasswordForEmail
+import co.paulfran.routes.carrierRoutes
 import co.paulfran.routes.loginRoute
 import co.paulfran.routes.registerRoute
 import io.ktor.application.*
@@ -23,21 +24,20 @@ fun Application.module(testing: Boolean = false) {
     install(CallLogging)
 
     // Required Features
+    install(Authentication) {
+        configureAuth()
+    }
     install(Routing) {
         registerRoute()
         loginRoute()
+        carrierRoutes()
     }
     install(ContentNegotiation) {
         gson {
             setPrettyPrinting()
         }
     }
-    install(Authentication) {
-        configureAuth()
-    }
-
 }
-
 private fun Authentication.Configuration.configureAuth() {
     basic {
         realm = "Carrier Server"
