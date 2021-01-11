@@ -28,3 +28,12 @@ suspend fun checkPasswordForEmail(email: String, passwordToCheck: String): Boole
 suspend fun getCarriersForUser(email: String): List<Carrier> {
     return carriers.find(Carrier::owners contains email).toList()
 }
+
+suspend fun saveCarrier(carrier: Carrier): Boolean {
+    val carrierExists = carriers.findOneById(carrier.id) != null
+    return if (carrierExists) {
+        carriers.updateOneById(carrier.id, carrier).wasAcknowledged()
+    } else {
+        carriers.insertOne(carrier).wasAcknowledged()
+    }
+}
