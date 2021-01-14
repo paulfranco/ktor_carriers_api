@@ -50,3 +50,14 @@ suspend fun deleteCarrierForUser(email: String, carrierId: String): Boolean {
         return carriers.deleteOneById(carrier.id).wasAcknowledged()
     } ?: return false
 }
+
+suspend fun addOwnerToCarrier(carrierId: String, owner: String): Boolean {
+    val owners = carriers.findOneById(carrierId)?.owners ?: return false
+    return carriers.updateOneById(carrierId, setValue(Carrier::owners, owners + owner)).wasAcknowledged()
+}
+
+suspend fun isOwnerOfCarrier(carrierId: String, owner: String): Boolean {
+    val carrier = carriers.findOneById(carrierId) ?: return false
+    return owner in carrier.owners
+}
+
