@@ -6,7 +6,7 @@ import org.bson.types.ObjectId
 data class Vehicle(
     val make: String,
     val model: String,
-    val year: String
+    val year: String,
     val color: String,
     val vin: String,
     val license: String,
