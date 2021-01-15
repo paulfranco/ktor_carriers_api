@@ -16,6 +16,7 @@ data class Carrier(
     val contactPhoneNumber: String,
     val owners: List<String>,
     val settlements: List<String>,
+    val vehicles: List<String>,
     @BsonId
     val id: String = ObjectId().toString()
 )
