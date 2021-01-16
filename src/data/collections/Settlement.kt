@@ -10,6 +10,7 @@ data class Settlement(
     val stopCount: Int,
     val routeCount: Int,
     val settlementAmount: Double,
+    val routes: List<Route>,
     @BsonId
     val id: String = ObjectId().toString()
 )
